@@ -38,7 +38,6 @@ RUN mkdir ~/dotfiles ~/.config
 COPY --chown=${HOST_USER}:root ./dotfiles /home/${HOST_USER}/dotfiles
 
 RUN cp ~/dotfiles/.bashrc-auto-tmux ~/.bashrc
-RUN source ~/.bashrc 
 
 RUN cp -r ~/dotfiles/nvim ~/dotfiles/tmux ~/.config
 RUN git clone --quiet -b v2.1.3 https://github.com/catppuccin/tmux.git ~/.config/tmux/plugins/catppuccin/tmux
