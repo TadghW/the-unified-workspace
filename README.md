@@ -1,6 +1,13 @@
-# My silly little workspace container
+# Workspace container
 
-Builds a container with the utilities, interpreters, compilers, and package managers I usually work with and installs my shell, tmux, and neovim configs. Exposes container to the network over ssh with key auth so I can share one workspace across multiple devices. Pre-authorizes the keys in `authorized_keys` for declarative access control.
+## This project
+
+- Builds a container with the utilities, compilers, interpreters, and package managers I work with. 
+- Installs my shell, tmux, and neovim configs. 
+- Exposes container to ssh access with publickey auth.
+- Pre-authorizes the keys in `authorized_keys` for declarative access control.
+
+This environment lives on my homeserver and is used as a single workspace accessed by my household's many clients. It offers a declarative, atomic environment that unites each of my devices into one tmux session and one set of git worktrees. 
 
 ## Notes:
 - `start-workspace.sh` and `refresh-workspace.sh` forward port 2222 on your host to 22 on the container so you can skip attaching
