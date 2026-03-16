@@ -9,7 +9,7 @@
 
 This environment lives on my homeserver and is used as a single workspace accessed by my household's many clients. It offers a declarative, atomic environment that unites each of my devices into one tmux session and one set of git worktrees. 
 
-## Notes:
+## Notes
 - `start-workspace.sh` and `refresh-workspace.sh` forward port 2222 on your host to 22 on the container so you can skip attaching
 - `start-workspace.sh` and `refresh-workspace.sh` ro mount the host's ssh keys for easy authentication across container rebuilds
 - There's a little loop in both scripts that looks for keys named id_rsa and id_ed25519 but you can expand that to other encryptions as you need
