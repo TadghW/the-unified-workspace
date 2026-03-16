@@ -2,7 +2,12 @@ FROM alpine:3.23.3
 
 ARG UID=1000
 ARG GID=1000
-ARG HOST_USER=tadgh
+ARG USER=tadgh
+ARG GROUP=tadgh
+ARG USER_GIT_EMAIL=tadgh@tadghwagstaff.com
+ARG USER_GIT_NAME=Tadgh
+ARG USER_GIT_DEFAULT_BRANCH=main
+
 ENV LANG=C.UTF-8
 ENV LC_CTYPE=C.UTF-8
 
@@ -25,45 +30,63 @@ RUN apk add --no-cache \
   podman \
   python3 
 
-RUN adduser -D -s /bin/bash -u ${UID} -g root ${HOST_USER}
+RUN addgroup ${GROUP} --gid ${GID}
+RUN adduser -D -u ${UID} -G ${GROUP} -s /bin/bash ${USER}
+# adduser -D (non-interactive) creates a passwordless account
+# passwordless accounts are considered "locked" (see /etc/shadow)
+# OpenSSH doesn't consider a locked account a valid target for key auth
+# to ssh into your account (even key auth) you need to replace the lock with a password
+RUN echo "${USER}:dummy-pass" | chpasswd
 
-# Very damgerous don't do outside of a silly work container
-RUN echo "${HOST_USER} ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/${HOST_USER} && chmod 0440 /etc/sudoers.d/${HOST_USER}
+# Very damgerous, don't do this outside of a silly dev container (passwordless root for ${USER})
+RUN echo "${USER} ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/${USER} && chmod 0440 /etc/sudoers.d/${USER}
 
 RUN ssh-keygen -A
 RUN mkdir -p /run/sshd
 RUN chmod 755 /run/sshd
 RUN printf '%s\n' \
   'PermitRootLogin no' \
+  'KbdInteractiveAuthentication no' \ 
   'PasswordAuthentication no' \
-  'UsePAM no' \
+  'PubkeyAuthentication yes' \
   >> /etc/ssh/sshd_config
 
-USER ${HOST_USER}
+RUN printf '%s\n' \
+  'Welcome to the Workspace! Good luck today!' \
+  > /etc/motd
 
-# TODO: Figure out setting the container up for some kind of auth in a way that isn't terrible
-RUN mkdir -p /home/tadgh/.ssh
-RUN chmod 700 /home/tadgh/.ssh
-RUN chown -R tadgh:root /home/tadgh/.ssh
+RUN mkdir -p /home/${USER}/.ssh
+RUN chmod 700 /home/${USER}/.ssh
+RUN chown -R ${USER}:${GROUP} /home/${USER}/.ssh
+
+COPY --chown=${USER}:${GROUP} ./authorized_keys  /home/${USER}/.ssh/authorized_keys
+RUN chmod 600 /home/${USER}/.ssh/authorized_keys
+
+
+
+USER ${USER}
 
 RUN curl -s https://ohmyposh.dev/install.sh | bash -s
 
 RUN mkdir ~/dotfiles ~/.config
-COPY --chown=${HOST_USER}:root ./dotfiles /home/${HOST_USER}/dotfiles
+COPY --chown=${USER}:${GROUP} ./dotfiles /home/${USER}/dotfiles
 
 RUN cp ~/dotfiles/.bashrc-auto-tmux ~/.bashrc
+RUN cp ~/dotfiles/.bash_profile ~/.bash_profile
 
 RUN cp -r ~/dotfiles/nvim ~/dotfiles/tmux ~/.config
 RUN git clone --quiet -b v2.1.3 https://github.com/catppuccin/tmux.git ~/.config/tmux/plugins/catppuccin/tmux
 
-RUN git config --global user.email "tadgh@tadghwagstaff.com"
-RUN git config --global user.name "Tadgh"
-RUN git config --global init.defaultBranch "main"
+RUN git config --global user.email ${USER_GIT_EMAIL}
+RUN git config --global user.name ${USER_GIT_NAME}
+RUN git config --global init.defaultBranch ${USER_GIT_DEFAULT_BRANCH}
 
 USER root
 
-WORKDIR /home/${HOST_USER}
+WORKDIR /home/${USER}
 
 EXPOSE 22
 
+# alpine doesn't come with a syslog daemon, and this container doesn't need one
+# instead we run sshd in foreground and pipe errors to stderr for podman logs
 CMD ["/usr/sbin/sshd", "-D", "-e"]
