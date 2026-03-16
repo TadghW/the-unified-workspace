@@ -46,7 +46,7 @@ RUN mkdir -p /run/sshd
 RUN chmod 755 /run/sshd
 RUN printf '%s\n' \
   'PermitRootLogin no' \
-  'KbdInteractiveAuthentication no' \ 
+  'KbdInteractiveAuthentication no' \
   'PasswordAuthentication no' \
   'PubkeyAuthentication yes' \
   >> /etc/ssh/sshd_config
@@ -61,8 +61,6 @@ RUN chown -R ${USER}:${GROUP} /home/${USER}/.ssh
 
 COPY --chown=${USER}:${GROUP} ./authorized_keys  /home/${USER}/.ssh/authorized_keys
 RUN chmod 600 /home/${USER}/.ssh/authorized_keys
-
-
 
 USER ${USER}
 
