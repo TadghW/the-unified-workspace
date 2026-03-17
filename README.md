@@ -4,7 +4,7 @@
 
 - Builds a tiny image with:
     - The utilities, compilers, interpreters, and package managers I use. 
-    - My shell, tmux, and neovim configs.
+    - My bash, tmux, and neovim configs.
     - Git, podman, and OpenSSH
     - A single admin user with passwordless sudo
     - SSH login access to that user for any with any public key in `authorized_keys`
@@ -53,7 +53,7 @@ If you want to use the default configuration (my config):
 
 - I recommend using [Rio](https://rioterm.com/) as your terminal emulator - it's very cross-platform and easy to configure. You can see my Rio config in `dotfiles/rio/`.
 - Remember to find and apply a theme to your terminal emulator for maximum eye-comfort :)
-- You'll be launched automatically into a `tmux` session when you log in. This behaviour is configured in `dotfiles/.bashrc-auto-tmux`, which is renamed to `.bashrc` and sourced by `.bash_profile` when you log in to the container. To use `tmux`:
+- You'll be launched automatically into a `tmux` session when you log in. This behaviour is configured in `dotfiles/.bashrc-auto-tmux`, which is renamed to `.bashrc` on installation, and sourced by `.bash_profile` when you log in to the container. To use my `tmux` config:
   1. Prefix is `Ctrl + A`
   2. `Prefix + -` for vertical split `Prefix + |` for horizontal. 
   3. `Prefix + Arrow keys` to resize a pane
