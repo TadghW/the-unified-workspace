@@ -61,8 +61,14 @@ If you want to use my configuration:
   2. `Prefix + -` for vertical split `Prefix + |` for horizontal. 
   3. `Prefix + Arrow keys` to resize a pane
   4. `Prefix + ` `h`, `j`, `k`, and `l` for navigation.
-  5. `Prefix + r` reloads the config.
-- I use nvim with `lazy-nvim`, `Mason`, `telescope`, `neotree`, and `alpha-nvim`:
+  5. `Prefix + x` to close a pane
+  6. `Prefix + c` to create a new window
+  7. Close all panes to close a window
+  8. `Prefix + n` to move to the next window
+  9. `Prefix + p` to move to the previous window
+  10. `Prefix + {NUMBER}` to move to a specific window
+  11. `Prefix + r` reloads the config.
+- My text editor is `nvim` with `lazy-nvim`, `Mason`, `telescope`, `neotree`, and `alpha-nvim`:
   1. Leader is `space`
   2. `Leader + e` to open neotree
   3. `Leader + b` to open neotree on open buffers
@@ -70,8 +76,9 @@ If you want to use my configuration:
   5. `Leader + fs` to search context for strings
   6. `Leader + ff` to search context for files.
   7. Otherwise, stock navigation
-- For nvim to render properly you need your terminal emulator to use a font patched with a large icon set - I recommend nerd-fonts, and love the JetbrainMono nerd font :)
+- For `nvim` and `ohmyposh` (my shell prompt fancy-ifier) to render properly you need your terminal emulator to use a font patched with a large icon set - I recommend nerd-fonts, and love the JetbrainMono nerd font :)
 - Remember to find and apply a theme on your terminal emulator for maximum eye-comfort
+- I recommend (Rio)[https://rioterm.com/] - it's very cross-platform and easy to configure
 - I have no alias other than the one I use to connect to the workspace which is `workspace` - avoid using this from within the workspace as it will nest.
 
 ## To-do:
