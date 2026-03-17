@@ -7,11 +7,11 @@
     - My shell, tmux, and neovim configs.
     - Git, podman, and OpenSSH
     - A single admin user with passwordless sudo
-    - Ssh login access to that user for all public keys in `authorized_keys`
+    - SSH login access to that user for any with any public key in `authorized_keys`
 - Starts a container that:
     - Mounts the host user's ssh keys
     - Mounts the host user's `~/projects` folder
-    - Publishes it's SSH port on the host at `:22222`
+    - Publishes its SSH port on the host at `:22222`
 
 This environment lives on my homeserver and is used as a single workspace that can be accessed by my household's many clients. It offers a declarative, atomic environment that unites each of my devices into one tmux session and one set of git worktree states. 
 
@@ -22,7 +22,7 @@ This environment lives on my homeserver and is used as a single workspace that c
 To deploy the unified workspace you will need a relatively modern x86 Linux host with:
  - Sudo
  - Podman
- - Static network address (_I recommend a DHCP entry, netbios name, or local DNS entry - avoid exposing this to the internet as it mounts the host's private key_)
+ - Static network address (_I recommend a DHCP entry, NetBIOS name, or local DNS entry - avoid exposing this to the internet as it mounts the host's private key_)
 
 ### Steps
 
@@ -55,5 +55,5 @@ To customise the workspace:
 
 ## To-do:
 - It would be painless and fruitful to expand the list of key types assembled in `start-workspace.sh` and `refresh-workspace.sh`
-- Workspace currently builds its own SSH host keys at build time. This sucks: each rebuild will change the server identity which trips SSH host key warnings on clients. You can get around this with by clearing your host key entry for the host, but a better approach would be the programmatic creation of dedicated persistent host key sets for the container when the user first runs `start-workspace.sh` and `refresh-workspace.sh` and mounting those host keys to the container.
+- Workspace currently builds its own SSH host keys at build time. This sucks: each rebuild will change the server identity which trips SSH host key warnings on clients. You can reset the expected host key by clearing your `known_hosts` entry for that host, but a better approach would be the programmatic creation of dedicated persistent host key sets for the container when the user first runs `start-workspace.sh` and `refresh-workspace.sh` and mounting those host keys to the container.
 - Arm64 version for Apple Silicon
